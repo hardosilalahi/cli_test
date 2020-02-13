@@ -9,6 +9,9 @@ using System.Text;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Drawing;
+using System.Drawing.Text;
+using System.IO;
 
 namespace cli_test
 {
@@ -25,7 +28,9 @@ namespace cli_test
         typeof(MultiplyNumber),
         typeof(DivideNumber),
         typeof(LocalIP),
-        typeof(ExternalIP)
+        typeof(ExternalIP),
+        typeof(SumUnlimited),
+        typeof(ScreenshotURL)
 
     )]
     class Program
@@ -158,64 +163,51 @@ namespace cli_test
                         allChars[i] = charsNumber[random.Next(charsNumber.Length)];
                     }
                 }
-
-                else if(boolNumbers == false){
-
-                    if(boolLower == false){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsUpper[random.Next(charsUpper.Length)];
-                        }
-                    }
-                    else if(boolUpper == false){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsComplete[random.Next(charsComplete.Length)];
-                        }
-                    }
-                    else{
+                else{
+                    if(boolLower == true){
                         for (int i = 0; i < allChars.Length; i++){
                             allChars[i] = charsLower[random.Next(charsLower.Length)];
                         }
                     }
-
-                }
-                else{
-                    for (int i = 0; i < allChars.Length; i++){
-                        allChars[i] = charsComplete[random.Next(charsComplete.Length)];
+                    else if (boolUpper == true){
+                        for (int i = 0; i < allChars.Length; i++){
+                            allChars[i] = charsUpper[random.Next(charsUpper.Length)];
+                        }
+                    }
+                    else{
+                        for (int i = 0; i < allChars.Length; i++){
+                            allChars[i] = charsText[random.Next(charsText.Length)];
+                        }
                     }
                 }
+
             }
             else{
+
 
                 if(boolLetters == false){
                     for (int i = 0; i < allChars.Length; i++){
                         allChars[i] = charsNumber[random.Next(charsNumber.Length)];
                     }
                 }
-
-                else if(boolNumbers == false){
-
-                    if(boolLower == false){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsUpper[random.Next(charsUpper.Length)];
-                        }
-                    }
-                    else if(boolUpper == false){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsComplete[random.Next(charsComplete.Length)];
-                        }
-                    }
-                    else{
+                else{
+                    if(boolLower == true){
                         for (int i = 0; i < allChars.Length; i++){
                             allChars[i] = charsLower[random.Next(charsLower.Length)];
                         }
                     }
-
-                }
-                else{
-                    for (int i = 0; i < allChars.Length; i++){
-                        allChars[i] = charsComplete[random.Next(charsComplete.Length)];
+                    else if (boolUpper == true){
+                        for (int i = 0; i < allChars.Length; i++){
+                            allChars[i] = charsUpper[random.Next(charsUpper.Length)];
+                        }
+                    }
+                    else{
+                        for (int i = 0; i < allChars.Length; i++){
+                            allChars[i] = charsText[random.Next(charsText.Length)];
+                        }
                     }
                 }
+
             }
 
             var finalString = new String(allChars);
@@ -329,8 +321,55 @@ namespace cli_test
                 }
             }
             Console.WriteLine(result);
-
-            
         }
     }
+
+    [Command(Description = "Command to add numbers until last input is empty", Name = "screenshot")]
+    class ScreenshotURL
+    {
+        [Argument(0)]
+        public string urlGambar { get; set; }
+
+
+        [Option(LongName = "output")]
+        public string output{get; set;}
+
+        public void OnExecute(CommandLineApplication app){
+            var nameFile = output;
+
+            System.Drawing.Image image = DownloadImageFromUrl(txtUrl.Text.Trim());
+        
+            string rootPath = @"/Users/user/cli_test/";
+            string fileName = System.IO.Path.Combine(rootPath, nameFile);
+            image.Save(fileName);
+        }
+
+        public System.Drawing.Image DownloadImageFromUrl(string imageUrl){
+            imageUrl = urlGambar;
+
+            System.Drawing.Image image = null;
+        
+            try{
+                System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(imageUrl);
+                webRequest.AllowWriteStreamBuffering = true;
+                webRequest.Timeout = 30000;
+        
+                System.Net.WebResponse webResponse = webRequest.GetResponse();
+        
+                System.IO.Stream stream = webResponse.GetResponseStream();
+        
+                image = System.Drawing.Image.FromStream(stream);
+        
+                webResponse.Close();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        
+            return image;
+        }
+    }
+
+
 }
