@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using System.Runtime.CompilerServices;
+using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
 using System.Globalization;
 using System;
@@ -10,8 +11,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Drawing;
-using System.Drawing.Text;
+using System.Drawing.Imaging;
+using System.Threading;
 using System.IO;
+using StringFreezingAttribute;
 
 namespace cli_test
 {
@@ -113,105 +116,56 @@ namespace cli_test
     [Command(Description = "Command to output a random Alphanumeric", Name = "random")]
     class RandomString{
 
-        [Option(LongName = "panjang")]
-        public string Panjang{get; set;}
-
-        [Option(LongName = "letters")]
-        public string Letters {get; set;}
-
-        [Option(LongName = "numbers")]
-        public string Numbers {get; set;}
-
-        [Option(LongName = "hurufkecil")]
-        public string HurufKecil {get; set;}
-
-        [Option(LongName = "uppercase")]
-        public string Upper {get; set;}
+        [Option("--letters")]
+        public string letters { get; set; }
+        [Option("--numbers")]
+        public string Number { get; set; }
+        [Option("--length")]
+        public int charLength { get; set; }
+        [Option("--uppercase")]
+        public bool upper { get; set; }
+        [Option("--lowercase")]
+        public bool lower { get; set; }
 
         public void OnExecute(CommandLineApplication app)
         {
-            var lengthText = Panjang ?? "32";
-            var intLengthText = Convert.ToInt32(lengthText);
+            Random random = new Random();
+            var all = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            var num = "0123456789";
+            var letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-            var includeLetters = Letters ?? "true";
-            var boolLetters = Convert.ToBoolean(includeLetters);
-            
-            var includeNumbers = Numbers ?? "true";
-            var boolNumbers = Convert.ToBoolean(includeNumbers);
+            int length = charLength;
+            if(length==0){length = 32;}
+            var stringChar = new char[length];
 
-            var onlyLower = HurufKecil ?? "true";
-            var boolLower = Convert.ToBoolean(onlyLower);
-
-            var onlyUpper = Upper ?? "true";
-            var boolUpper = Convert.ToBoolean(onlyUpper);
-
-
-            var charsComplete = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-            var charsNumber = "0123456789";
-            var charsText = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            var charsLower = "abcdefghijklmnopqrstuvwxyz";
-            var charsUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-
-            var allChars = new char[intLengthText];
-            var random = new Random();
-            
-            if(intLengthText == 32){
-
-                if(boolLetters == false){
-                    for (int i = 0; i < allChars.Length; i++){
-                        allChars[i] = charsNumber[random.Next(charsNumber.Length)];
-                    }
+            if (letters == "false"){
+                for (int i = 0; i < length; i++){
+                    stringChar[i] = num[random.Next(num.Length)];
                 }
-                else{
-                    if(boolLower == true){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsLower[random.Next(charsLower.Length)];
-                        }
-                    }
-                    else if (boolUpper == true){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsUpper[random.Next(charsUpper.Length)];
-                        }
-                    }
-                    else{
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsText[random.Next(charsText.Length)];
-                        }
-                    }
+            }
+            else if (Number == "false"){
+                for (int i = 0; i < length; i++){
+                    stringChar[i] = letter[random.Next(letter.Length)];
                 }
-
             }
             else{
-
-
-                if(boolLetters == false){
-                    for (int i = 0; i < allChars.Length; i++){
-                        allChars[i] = charsNumber[random.Next(charsNumber.Length)];
-                    }
+                for (int i = 0; i < length; i++){
+                    stringChar[i] = all[random.Next(all.Length)];
                 }
-                else{
-                    if(boolLower == true){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsLower[random.Next(charsLower.Length)];
-                        }
-                    }
-                    else if (boolUpper == true){
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsUpper[random.Next(charsUpper.Length)];
-                        }
-                    }
-                    else{
-                        for (int i = 0; i < allChars.Length; i++){
-                            allChars[i] = charsText[random.Next(charsText.Length)];
-                        }
-                    }
-                }
-
             }
 
-            var finalString = new String(allChars);
-            Console.WriteLine(finalString);
+            if (upper == true){
+                var finalStringUp = new String(stringChar).ToUpper();
+                Console.WriteLine(finalStringUp);
+            }
+            else if (lower == true){
+                var finalStringLow = new String(stringChar).ToLower();
+                Console.WriteLine(finalStringLow);
+            }
+            else{
+                var finalString = new String(stringChar);
+                Console.WriteLine(finalString);
+            }
         }
     }
 
@@ -331,43 +285,19 @@ namespace cli_test
         public string urlGambar { get; set; }
 
 
-        [Option(LongName = "output")]
-        public string output{get; set;}
+        // [Option(LongName = "output")]
+        // public string output{get; set;}
 
         public void OnExecute(CommandLineApplication app){
-            var nameFile = output;
+            var imageUrl = urlGambar;
+            // var nameFile = output;
 
-            System.Drawing.Image image = DownloadImageFromUrl(txtUrl.Text.Trim());
-        
-            string rootPath = @"/Users/user/cli_test/";
-            string fileName = System.IO.Path.Combine(rootPath, nameFile);
-            image.Save(fileName);
-        }
+            var screenshotJob = ScreenshotJobBuilder.Create(imageUrl)
+                        .SetBrowserSize(1366, 768)
+                        .SetCaptureZone(CaptureZone.FullPage) 
+                        .SetTrigger(new WindowLoadTrigger()); 
 
-        public System.Drawing.Image DownloadImageFromUrl(string imageUrl){
-            imageUrl = urlGambar;
-
-            System.Drawing.Image image = null;
-        
-            try{
-                System.Net.HttpWebRequest webRequest = (System.Net.HttpWebRequest)System.Net.HttpWebRequest.Create(imageUrl);
-                webRequest.AllowWriteStreamBuffering = true;
-                webRequest.Timeout = 30000;
-        
-                System.Net.WebResponse webResponse = webRequest.GetResponse();
-        
-                System.IO.Stream stream = webResponse.GetResponseStream();
-        
-                image = System.Drawing.Image.FromStream(stream);
-        
-                webResponse.Close();
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        
-            return image;
+            System.Drawing.Image screenshot = screenshotJob.Freeze();
         }
     }
 

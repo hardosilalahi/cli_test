@@ -36,6 +36,10 @@
       "frameworks": {
         "netcoreapp3.1": {
           "dependencies": {
+            "Freezer": {
+              "target": "Package",
+              "version": "[1.0.1.5, )"
+            },
             "McMaster.Extensions.CommandLineUtils": {
               "target": "Package",
               "version": "[2.5.1, )"
