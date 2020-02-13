@@ -1,0 +1,13 @@
+/Users/user/cli_test/bin/Release/netcoreapp3.1/cli_test
+/Users/user/cli_test/bin/Release/netcoreapp3.1/cli_test.deps.json
+/Users/user/cli_test/bin/Release/netcoreapp3.1/cli_test.runtimeconfig.json
+/Users/user/cli_test/bin/Release/netcoreapp3.1/cli_test.runtimeconfig.dev.json
+/Users/user/cli_test/bin/Release/netcoreapp3.1/cli_test.dll
+/Users/user/cli_test/bin/Release/netcoreapp3.1/cli_test.pdb
+/Users/user/cli_test/bin/Release/netcoreapp3.1/McMaster.Extensions.CommandLineUtils.dll
+/Users/user/cli_test/obj/Release/netcoreapp3.1/cli_test.csprojAssemblyReference.cache
+/Users/user/cli_test/obj/Release/netcoreapp3.1/cli_test.AssemblyInfoInputs.cache
+/Users/user/cli_test/obj/Release/netcoreapp3.1/cli_test.AssemblyInfo.cs
+/Users/user/cli_test/obj/Release/netcoreapp3.1/cli_test.csproj.CopyComplete
+/Users/user/cli_test/obj/Release/netcoreapp3.1/cli_test.dll
+/Users/user/cli_test/obj/Release/netcoreapp3.1/cli_test.pdb
