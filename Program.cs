@@ -308,4 +308,29 @@ namespace cli_test
             Console.WriteLine(externalip);
         }
     }
+
+    [Command(Description = "Command to add numbers until last input is empty", Name = "sum")]
+    class SumUnlimited
+    {
+        public void OnExecute(CommandLineApplication app){
+            long result = 0;
+            string Empty = "";
+            while (Empty != null){
+                Console.Write("Insert number : ");
+                Empty = Console.ReadLine();
+                if (Empty == "")
+                {
+                    break;
+                }
+                else
+                {
+                    long integerInput = Convert.ToInt32(Empty);
+                    result += integerInput;
+                }
+            }
+            Console.WriteLine(result);
+
+            
+        }
+    }
 }
